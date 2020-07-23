@@ -1,0 +1,115 @@
+package Projekt;
+
+import java.awt.Color;
+import java.awt.Graphics;
+import java.awt.event.KeyEvent;
+
+import Projekt.Game.STATE;
+
+public class HUD {
+
+	private handler handle;
+	private Game game;
+	
+	public static float HEALTH,HEALTH2=0;
+	private static boolean player2alive = false;
+	private int score=0,level=1;
+	
+	public HUD(handler handle,Game game) {
+		this.handle = handle;
+		this.game = game;
+	}
+	
+	
+	
+	public void tick() {
+		for (int i = 0; i<handle.object.size(); i++) {
+			GameObject tempObject = handle.object.get(i);
+			if(tempObject.getID() == ID.Player) HEALTH = tempObject.getHealth();
+			if(tempObject.getID() == ID.Player2) HEALTH2 = tempObject.getHealth();
+		
+		}
+	if (HEALTH2>0) player2alive = true;
+	HEALTH  = Game.clamp(HEALTH, 0, 3); //DZIALA
+	
+	score++;
+	
+	if (HEALTH<=0 && HEALTH2 >=0) {
+		if(HEALTH2<=0) game.gameState = STATE.Menu;
+	}else if (HEALTH2<=0 && HEALTH >=0) {
+		if(HEALTH<=0) game.gameState = STATE.Menu; 
+	}
+	}
+	
+	public void render(Graphics g) {
+		/*g.setColor(Color.gray);
+		g.fillRect(15, 15, 400, 32);
+		g.setColor(Color.green);
+		g.fillRect(15, 15, 200, 32);
+		g.setColor(Color.white);
+		g.drawRect(15, 15, 400, 32);*/
+		
+		g.setColor(Color.white);
+		g.drawRect(15, 15, 200, 32);
+		
+		//p1 stats
+		if(HEALTH >= 1) {
+			g.setColor(Color.red);
+			g.fillRect(20, 20, 50, 22);
+		}
+		if(HEALTH >= 2) {
+			g.fillRect(90, 20, 50, 22);
+		}
+		if(HEALTH >= 3) {
+			g.fillRect(160, 20, 50, 22);
+		}
+		
+		//p2 stats
+		if(player2alive) {
+			
+			g.setColor(Color.white);
+			g.drawRect(715, 15, 200, 32);
+			
+			if(HEALTH2 >= 1) {
+				g.setColor(Color.red);
+				g.fillRect(720, 20, 50, 22);
+			}
+			if(HEALTH2 >= 2) {
+				g.fillRect(790, 20, 50, 22);
+			}
+			if(HEALTH2 >= 3) {
+				g.fillRect(860, 20, 50, 22);
+			}	
+		}
+		
+		g.drawString("SCORE:"+ score, 350, 40);
+		g.drawString("WAVE:"+ level, 460, 40);
+		
+		
+	}
+		
+	
+	public void setScore(int score) {
+		this.score = score;
+	}
+	
+	public int getScore() {
+		return score;
+	}
+	
+	/*public void setGameTime(int gameTime) {
+		this.gameTime = gameTime;
+	}
+	
+	public int getGameTime() {
+		return gameTime;
+	}*/
+	
+	public void setLevel(int level) {
+		this.level = level;
+	}
+	
+	public int getLevel() {
+		return level;
+	}
+}

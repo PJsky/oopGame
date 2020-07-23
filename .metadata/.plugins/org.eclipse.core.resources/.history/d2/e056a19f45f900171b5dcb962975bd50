@@ -1,0 +1,24 @@
+package Projekt;
+
+import java.util.Random;
+
+public class MachinegunBullet extends Bullet{
+	
+	Random r = new Random();
+
+	public MachinegunBullet(float x, float y, ID id, handler handle, int facing) {
+		super(x, y, id, handle, facing);
+		dmg=2;
+		
+		switch(facing) {
+		case 0: velY = -5; velX = r.nextInt(3); velX = -1 + velX; velX = velX/2;
+		break;
+		case 1: velX = 5;
+		break;
+		case 2: velY = 5;
+		break;
+		case 3: velX = -5;
+		}
+	}
+
+}

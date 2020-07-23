@@ -1,0 +1,125 @@
+package Projekt;
+
+import java.util.Random;
+
+public class Spawner {
+	
+	
+	
+	private handler handle;
+	private HUD hud;
+	private Random r = new Random();
+	
+	private int gameTime = 1; 
+	private boolean timeOn = true;
+	public boolean win = false;
+	
+	
+	public Spawner(handler handle, HUD hud) {
+		this.handle = handle;
+		this.hud = hud;
+	}
+	
+	public void tick() {
+		if(timeOn)
+		gameTime++;
+		
+		//System.out.println(gameTime);
+		
+		
+		for (int i = 0; i<handle.object.size(); i++) {
+			GameObject tempObject = handle.object.get(i);
+			
+			
+			if(tempObject.getID() == ID.BossEnemy||tempObject.getID() == ID.BossEnemy2) {
+				
+				if(tempObject.getHealth() <= 0) {
+				handle.removeObject(tempObject);	
+				timeOn = true;
+				}
+				
+				}
+			
+			if(tempObject.getID() == ID.BossEnemy2) {
+				
+				hud.setLevel(5);
+				}
+			
+
+			
+		}
+		
+		if(gameTime%100 == 3) {
+			switch(r.nextInt(3)) {
+			case 0:
+				handle.addObject(new NormalGrunt(1350, 0, ID.Enemy,handle, 1));
+				break;
+			case 1:
+				handle.addObject(new FastGrunt(1350, 300, ID.Enemy,handle, 1));
+				break;
+			case 2:
+				handle.addObject(new TankyGrunt(1350, 600, ID.Enemy,handle, 1));
+				break;
+			
+			}
+		}
+		
+		if(hud.getScore()%700==1) {
+			handle.addObject(new Helicopter(1400,300, ID.Animation, handle));// losowy drop
+		}
+		
+		if(gameTime > 100) {
+			gameTime = 0;	
+			hud.setLevel(hud.getLevel()+1);
+			
+
+
+			//handle.addObject(new SmartEnemyV2(r.nextInt(200)-200 ,r.nextInt(1360)-200,ID.Enemy, handle,1));//1 in notebook
+			//handle.addObject(new SmartEnemyV2(r.nextInt(200)+1280 ,r.nextInt(1360)-200,ID.Enemy, handle));//2
+			//handle.addObject(new SmartEnemyV2(r.nextInt(1680)-200 ,r.nextInt(200) -200,ID.Enemy, handle));//3
+			//handle.addObject(new SmartEnemyV2(r.nextInt(1680)-200 ,r.nextInt(200) + 960,ID.Enemy, handle));//4
+			
+			if(hud.getLevel() == 2) {
+				//handle.addObject(new BossSpawner(1080,370, ID.BossEnemy, handle));
+				handle.addObject(new BossSpawner(-100,370, ID.BossEnemy, handle));
+
+				timeOn = false;
+				//handle.addObject(new SmartEnemyV2(r.nextInt(200)-200 ,r.nextInt(1360)-200,ID.Enemy, handle));//1 in notebook
+				//handle.addObject(new SmartEnemyV2(r.nextInt(200)+1280 ,r.nextInt(1360)-200,ID.Enemy, handle));//2
+				//handle.addObject(new SmartEnemyV2(r.nextInt(1680)-200 ,r.nextInt(200) -200,ID.Enemy, handle));//3
+				//handle.addObject(new SmartEnemyV2(r.nextInt(1680)-200 ,r.nextInt(200) + 960,ID.Enemy, handle));//4
+				
+				
+			}
+			
+			if(hud.getLevel() == 4) {
+				//handle.clearEnemies();
+				//handle.addObject(new BossEnemy(480,-100, ID.BossEnemy, handle));
+				handle.addObject(new BossEnemy(1080,760, ID.BossEnemy2, handle));
+				timeOn = false;
+						}
+			if(hud.getLevel() == 5) {
+				handle.object.clear();	
+				gameTime = 0;
+				hud.setScore(0);
+				win= true;
+			}
+		}
+		
+		
+	}
+	
+	
+	public void setGameTime(int gameTime) {
+		this.gameTime = gameTime;
+	}
+	
+	public int getGameTime() {
+		return gameTime;
+	}
+	
+	public void timeOn () {
+		this.timeOn = true;
+	}
+
+}

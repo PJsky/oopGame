@@ -1,0 +1,74 @@
+package Projekt;
+
+import java.awt.Color;
+import java.awt.Graphics;
+import java.awt.Rectangle;
+import java.awt.image.BufferedImage;
+
+public class Weapon extends GameObject{
+	
+	private handler handle;
+	protected Sheet sSheet = new Sheet(Game.sSheetW);
+	private BufferedImage prz_skin;
+
+	
+	public Weapon(float x, float y, ID id, handler handle, int weapon) {
+		super(x, y, id);
+		this.handle= handle;
+		this.weapon = weapon;
+		// TODO Auto-generated constructor stub
+	}
+
+	@Override
+	public void tick() {
+		// TODO Auto-generated method stub		
+		collision();
+		
+	}
+	
+
+	private void collision() {
+		for(int i =0; i<handle.object.size(); i++) {
+			GameObject tempObject = handle.object.get(i);
+			
+			if(tempObject.getID() == ID.Player||tempObject.getID() == ID.Player2) {
+				
+				if(getBounds().intersects(tempObject.getBounds())) {
+					//collision code					
+					tempObject.weapon = weapon;
+					handle.removeObject(this);
+					
+				}
+				
+			}			
+			
+		}
+	}
+
+	@Override
+	public void render(Graphics g) {
+		// TODO Auto-generated method stub
+		switch(weapon) {
+		case 2: 
+		prz_skin = sSheet.getImage(1, 1, 24, 24);
+		break;
+		case 3: 
+		prz_skin = sSheet.getImage(1, 2, 24, 24);
+		break;
+		case 4: 
+		prz_skin = sSheet.getImage(1, 3, 24, 24);
+		}
+		
+		
+		g.drawImage(prz_skin,(int)x,(int)y,null);
+
+		
+	}
+
+	@Override
+	public Rectangle getBounds() {
+		// TODO Auto-generated method stub
+		return new Rectangle((int)x,(int)y,24,24); // returning the current hitbox
+	}
+
+}

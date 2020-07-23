@@ -1,0 +1,19 @@
+package Projekt;
+
+public class MachinegunBullet extends Bullet{
+
+	public MachinegunBullet(float x, float y, ID id, handler handle, int facing) {
+		super(x, y, id, handle, facing);
+		
+		switch(facing) {
+		case 0: velY = -5;
+		break;
+		case 1: velX = 5;
+		break;
+		case 2: velY = 5;
+		break;
+		case 3: velX = -5;
+		}
+	}
+
+}

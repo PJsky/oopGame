@@ -1,0 +1,194 @@
+package Projekt;
+
+import java.awt.Color;
+import java.awt.Graphics;
+import java.awt.Graphics2D;
+import java.awt.Rectangle;
+import java.awt.image.BufferedImage;
+
+public class Player extends GameObject {
+
+	handler handle;
+	private static boolean damaged = false;
+	private static int iFrame;
+	protected Sheet sSheet = new Sheet(Game.sSheet);
+	protected Sheet sSheet2 = new Sheet(Game.sSheet2);
+	protected Sheet sSheetPog = new Sheet(Game.sSheetPog);
+
+
+	private BufferedImage player_skin,head;
+
+
+	
+	public Player(float x, float y, ID id, handler handle, Color col, int color) {
+		super(x, y, id);
+		// TODO Auto-generated constructor stub
+		//velX =1;
+		this.handle = handle;
+		health = 3;
+		this.col = col;
+		this.color = color;
+		
+		
+		
+	}
+	
+	@Override
+	public Rectangle getBounds() {
+		// TODO Auto-generated method stub
+		return new Rectangle((int)x,(int)y,32,48); // returning the current hitbox
+	}
+	
+
+	
+	
+	
+	@Override
+	public void tick() {
+		// TODO Auto-generated method stub
+		x += velX;
+		y += velY;
+		
+		//g.drawRect(20, 80, 1050, 800);
+		x = Game.clamp(x, 70, 1070-33);
+		y = Game.clamp(y, 110, 850 - 49);
+		
+		collision();
+		iFrame --;
+		if(iFrame <= 0) damaged = false;
+		/*if (health == 0) {
+			System.out.println("DEAD");
+
+		}*/
+		shootTimer--;
+		if(moving)animationTimer++;
+		//if(shootTimer-- <= 0)System.out.println("pew");
+		if(animationTimer>=30) animationTimer = 1;
+		//System.out.println(animationTimer);
+		
+	}
+	
+	
+	
+	private void collision() {
+		for(int i =0; i<handle.object.size(); i++) {
+			GameObject tempObject = handle.object.get(i);
+			
+			if(tempObject.getID() == ID.Enemy) {
+				
+				if(getBounds().intersects(tempObject.getBounds())) {
+					//collision code
+					//tempObject.setHealth(tempObject.getHealth()-1);
+					if(damaged == false) {
+					health -=1;
+					damaged = true;
+					iFrame = 100;}
+					
+				}
+				
+			}
+			if(tempObject.getID()== ID.Player) {
+				if(tempObject.health == 0) {
+				handle.removeObject(tempObject);
+				handle.addObject(new PlayerGhost(tempObject.getX(),tempObject.getY(), ID.Player, handle));
+				}
+				
+			}
+			
+			if(tempObject.getID()== ID.Player2) {
+				if(tempObject.health == 0) {
+				handle.removeObject(tempObject);
+				handle.addObject(new PlayerGhost(tempObject.getX(),tempObject.getY(), ID.Player2, handle));
+				}
+				
+			}
+			
+			
+			
+		}
+	}
+	
+	
+
+	@Override
+	public void render(Graphics g) {
+		// TODO Auto-generated method stub
+		if(this.id==ID.Player||this.id==ID.PlayerPreview) {
+		if(animationTimer>=0&&animationTimer<10)player_skin = sSheet.getImage(facing+1, 3*color-2, 32, 48);
+		if(animationTimer>10&&animationTimer<20)player_skin = sSheet.getImage(facing+1, 3*color-1, 32, 48);
+		if(animationTimer>=20)player_skin = sSheet.getImage(facing+1, 3*color, 32, 48);
+		}
+		
+		if(this.id==ID.Player2||this.id==ID.PlayerPreview2) {
+		if(animationTimer>=0&&animationTimer<10)player_skin = sSheet2.getImage(facing+1, 3*color-2, 32, 48);
+		if(animationTimer>10&&animationTimer<20)player_skin = sSheet2.getImage(facing+1, 3*color-1, 32, 48);
+		if(animationTimer>=20)player_skin = sSheet2.getImage(facing+1, 3*color, 32, 48);
+		}
+		
+	
+		
+		if(this.id==ID.Player) {
+			head = sSheet.getImage(3, 3*color-2, 32, 30);
+			
+			if(health>=1)g.drawImage(head, 20, 18, null);
+			if(health>=2)g.drawImage(head, 90, 18, null);
+			if(health>=3)g.drawImage(head, 160, 18, null);
+		}
+		
+		if(this.id==ID.Player2) {
+			head = sSheet2.getImage(3, 3*color-2, 32, 30);
+			
+			if(health>=1)g.drawImage(head, 720, 18, null);
+			if(health>=2)g.drawImage(head, 790, 18, null);
+			if(health>=3)g.drawImage(head, 860, 18, null);
+		}
+		
+		
+	
+	//p2 stats
+	/*if(player2alive) {
+		
+		g.setColor(Color.white);
+		g.drawRect(715, 15, 200, 32);
+		
+		if(HEALTH2 >= 1) {
+			g.setColor(Color.red);
+			g.fillRect(720, 20, 50, 22);
+		}
+		if(HEALTH2 >= 2) {
+			g.fillRect(790, 20, 50, 22);
+		}
+		if(HEALTH2 >= 3) {
+			g.fillRect(860, 20, 50, 22);
+		}	
+	}*/
+		
+		
+		/*
+		if(facing==0) {
+		if(animationTimer==0)player_skin = sSheet.getImage(1, 3*color-2, 32, 48);
+		if(animationTimer>0&&animationTimer<15)player_skin = sSheet.getImage(1, 3*color-1, 32, 48);
+		if(animationTimer>=15)player_skin = sSheet.getImage(1, 3*color, 32, 48);
+
+		}
+		
+		if(facing==2)
+		player_skin = sSheet.getImage(2, 3*color-2, 32, 48);
+		if(facing==1)
+		player_skin = sSheet.getImage(3, 3*color-2, 32, 48);
+		if(facing==3)
+		player_skin = sSheet.getImage(4, 3*color-2, 32, 48);*/
+		//Graphics2D g2d = (Graphics2D) g; d// just so we can use draw
+		//g.setColor(Color.red);
+		//g2d.draw(getBounds());
+		
+		//g.setColor(col);
+		//g.fillRect((int)x, (int)y, 32, 48);
+		
+		g.drawImage(player_skin,(int)x,(int)y,null);
+		
+	}
+
+
+
+}

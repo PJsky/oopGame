@@ -1,0 +1,51 @@
+package Projekt;
+
+import java.util.Random;
+
+public class Spawner {
+	
+	
+	
+	private handler handle;
+	private HUD hud;
+	private Random r = new Random();
+	
+	private int gameTime = 0; 
+	
+	
+	public Spawner(handler handle, HUD hud) {
+		this.handle = handle;
+		this.hud = hud;
+	}
+	
+	public void tick() {
+		gameTime++;
+		
+		if(gameTime >= 200) {
+			gameTime = 0;	
+			hud.setLevel(hud.getLevel()+1);
+			
+			handle.addObject(new SmartEnemyV2(r.nextInt(200)-200 ,r.nextInt(1360)-200,ID.Enemy, handle));//1 in notebook
+			handle.addObject(new SmartEnemyV2(r.nextInt(200)+1280 ,r.nextInt(1360)-200,ID.Enemy, handle));//2
+			handle.addObject(new SmartEnemyV2(r.nextInt(1680)-200 ,r.nextInt(200) -200,ID.Enemy, handle));//3
+			handle.addObject(new SmartEnemyV2(r.nextInt(1680)-200 ,r.nextInt(200) + 960,ID.Enemy, handle));//4
+			
+			if(hud.getLevel() == 2) {
+				handle.addObject(new SmartEnemyV2(r.nextInt(200)-200 ,r.nextInt(1360)-200,ID.Enemy, handle));//1 in notebook
+				handle.addObject(new SmartEnemyV2(r.nextInt(200)+1280 ,r.nextInt(1360)-200,ID.Enemy, handle));//2
+				handle.addObject(new SmartEnemyV2(r.nextInt(1680)-200 ,r.nextInt(200) -200,ID.Enemy, handle));//3
+				handle.addObject(new SmartEnemyV2(r.nextInt(1680)-200 ,r.nextInt(200) + 960,ID.Enemy, handle));//4
+				
+				
+			}
+			
+			if(hud.getLevel() == 3) {
+				//handle.clearEnemies();
+				//handle.addObject(new BossEnemy(480,-100, ID.BossEnemy, handle));
+			}
+		}
+		
+		
+	}
+
+}

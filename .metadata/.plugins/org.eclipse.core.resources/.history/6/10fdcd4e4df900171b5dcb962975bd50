@@ -1,0 +1,15 @@
+package Projekt;
+
+public enum ID {
+	Player(),
+	Player2(),
+	PlayerPreview(),
+	PlayerPreview2(),
+	BossEnemy(),
+	BossEnemy2(),
+	Bullet(),
+	Weapon(),
+	WeaponPreview(),
+	Animation(),
+	Enemy();
+}

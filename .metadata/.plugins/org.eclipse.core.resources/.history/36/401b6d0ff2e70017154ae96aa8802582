@@ -1,0 +1,20 @@
+package Projekt;
+
+public class ShotgunBullet2 extends Bullet{
+
+	public ShotgunBullet2(float x, float y, ID id, handler handle, int facing) {
+		super(x, y, id, handle, facing);
+		dmg=1;
+		
+		switch(facing) {
+		case 0: velY = -5; velX = 0.5f;
+		break;
+		case 1: velX = 5;
+		break;
+		case 2: velY = 5; velX = -0.5f;
+		break;
+		case 3: velX = -5;
+		}
+	}
+
+}
